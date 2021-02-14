@@ -28,6 +28,7 @@ class TestGame(unittest.TestCase):
         )
         self.assertTrue(game.is_p1_to_move())
         self.assertEqual(game.get_outcome(), Outcome.ONGOING)
+        self.assertListEqual(game.get_move_history(), [])
 
     def test_play_moves(self):
         game = Game(num_rows=8, num_cols=9, line_length_to_win=4)
@@ -83,6 +84,7 @@ class TestGame(unittest.TestCase):
         )
         self.assertTrue(game.is_p1_to_move())
         self.assertEqual(game.get_outcome(), Outcome.ONGOING)
+        self.assertListEqual(game.get_move_history(), [])
 
     def test_player_1_to_move(self):
         game = Game(num_rows=8, num_cols=9, line_length_to_win=4)
@@ -227,6 +229,7 @@ class TestGame(unittest.TestCase):
         )
         self.assertTrue(game.is_p1_to_move())
         self.assertEqual(game.get_outcome(), Outcome.ONGOING)
+        self.assertListEqual(game.get_move_history(), [])
 
     def test_start_new_after_p2_win(self):
         game = Game(num_rows=4, num_cols=4, line_length_to_win=3)
@@ -247,6 +250,7 @@ class TestGame(unittest.TestCase):
         )
         self.assertTrue(game.is_p1_to_move())
         self.assertEqual(game.get_outcome(), Outcome.ONGOING)
+        self.assertListEqual(game.get_move_history(), [])
 
     def test_start_new_after_draw(self):
         game = Game(num_rows=4, num_cols=4, line_length_to_win=3)
@@ -267,6 +271,7 @@ class TestGame(unittest.TestCase):
         )
         self.assertTrue(game.is_p1_to_move())
         self.assertEqual(game.get_outcome(), Outcome.ONGOING)
+        self.assertListEqual(game.get_move_history(), [])
 
     def test_play_move_after_p1_win(self):
         game = Game(num_rows=4, num_cols=4, line_length_to_win=3)
@@ -297,3 +302,20 @@ class TestGame(unittest.TestCase):
             Exception, r"Tried to play move 2 in finished game"
         ):
             game.play_move(2)
+
+    def test_move_history_partial_game(self):
+        game = Game(num_rows=8, num_cols=9, line_length_to_win=4)
+        moves = [1, 7, 7, 2, 1, 0, 2, 2, 2, 2, 3, 2]
+        for move in moves:
+            game.play_move(move)
+        self.assertListEqual(game.get_move_history(), moves)
+
+    def test_move_history_full_game(self):
+        game = Game(num_rows=8, num_cols=9, line_length_to_win=4)
+        moves = [0, 1, 0, 1, 0, 1, 2, 3, 2, 3, 2, 3, 4, 5, 4, 5, 4, 5, 6]
+        moves += [7, 6, 7, 6, 7, 8, 0, 8, 0, 8, 0, 1, 2, 1, 2, 1, 2, 3, 4]
+        moves += [3, 4, 3, 4, 5, 6, 5, 6, 5, 6, 7, 8, 7, 8, 7, 8, 0, 1, 0]
+        moves += [1, 2, 3, 2, 3, 4, 5, 4, 5, 6, 7, 6, 7, 8, 8]
+        for move in moves:
+            game.play_move(move)
+        self.assertListEqual(game.get_move_history(), moves)

@@ -18,6 +18,7 @@ class Game:
         ]
         self._p1_to_move = True
         self._outcome = Outcome.ONGOING
+        self._move_history = []
 
     def get_board(self) -> List[List[SlotState]]:
         return copy.deepcopy(self._board)
@@ -31,6 +32,9 @@ class Game:
 
     def get_outcome(self) -> Outcome:
         return self._outcome
+
+    def get_move_history(self) -> List[int]:
+        return self._move_history
 
     def get_legal_moves(self) -> Set[int]:
         legal_moves = set()
@@ -124,6 +128,9 @@ class Game:
         )
         self._p1_to_move = not self._p1_to_move
 
+        self._move_history.append(move)
+
+        # Check if outcome has been determined
         pos_just_played = (row, move)
         p1_just_played = not self._p1_to_move
         if self.player_has_line(p1_just_played, pos_just_played):
