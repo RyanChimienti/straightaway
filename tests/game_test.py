@@ -186,6 +186,13 @@ class TestGame(unittest.TestCase):
             game.play_move(move)
         self.assertEqual(game.get_outcome(), Outcome.PLAYER_2_WIN)
 
+    def test_p2_win_diagonal_down(self):
+        game = Game(num_rows=4, num_cols=4, line_length_to_win=3)
+        moves = [0, 3, 2, 2, 0, 1, 1, 1]
+        for move in moves:
+            game.play_move(move)
+        self.assertEqual(game.get_outcome(), Outcome.PLAYER_2_WIN)
+
     def test_draw(self):
         game = Game(num_rows=8, num_cols=9, line_length_to_win=4)
         moves = [0, 1, 0, 1, 0, 1, 2, 3, 2, 3, 2, 3, 4, 5, 4, 5, 4, 5, 6]
